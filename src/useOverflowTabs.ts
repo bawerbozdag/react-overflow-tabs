@@ -70,15 +70,9 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>(options: IOverflow
 
         tabElements.forEach((element) => observer.observe(element));
 
-        // resize observer: layout changes will re-trigger IO anyway
-        const containerResizeObserver = new ResizeObserver(() => {});
-
-        containerResizeObserver.observe(containerEl); // watch container size
-
         // cleanup
         return () => {
             observer.disconnect();
-            containerResizeObserver.disconnect();
         };
         //
     }, []);
