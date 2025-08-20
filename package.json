@@ -1,0 +1,50 @@
+{
+    "name": "react-overflow-tabs",
+    "version": "1.0.0",
+    "description": "A headless React utility to gracefully collapse overflowing tabs into a dropdown menu.",
+    "main": "index.js",
+    "scripts": {
+        "format": "prettier --write ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss}"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bawerbozdag/react-overflow-tabs.git"
+    },
+    "keywords": [
+        "react",
+        "tabs",
+        "overflow",
+        "dropdown",
+        "headless",
+        "hook",
+        "responsive",
+        "navigation",
+        "intersection-observer",
+        "resize-observer",
+        "ui-agnostic",
+        "tabbar",
+        "navbar",
+        "bootstrap",
+        "tailwind",
+        "mui",
+        "menu",
+        "react-hook",
+        "overflow-tabs"
+    ],
+    "author": "Baver Bozdağ",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/bawerbozdag/react-overflow-tabs/issues"
+    },
+    "homepage": "https://github.com/bawerbozdag/react-overflow-tabs#readme",
+    "devDependencies": {
+        "@types/react": "^19.1.10",
+        "@types/react-dom": "^19.1.7",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
+        "typescript": "^5.9.2"
+    },
+    "dependencies": {
+        "prettier": "^3.6.2"
+    }
+}
