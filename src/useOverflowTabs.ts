@@ -61,7 +61,7 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>(options: IOverflow
             },
             {
                 root: containerEl, // measure visibility relative to the nav container
-                threshold: 1, // require full visibility (100%)
+                threshold: 0.999, // require full visibility (100%)
             },
         );
 
