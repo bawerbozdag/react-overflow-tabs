@@ -7,7 +7,7 @@ export interface IOverflowTabsOptions<T extends HTMLElement = HTMLElement> {
      * - React ref (current: T | null)
      * - or direct element (via query selector)
      */
-    container: React.RefObject<T> | T; // container to measure overflow
+    container: React.RefObject<T | null> | T; // container to measure overflow
     // CSS selector for items, each must have data-overflow-key
     tabSelector?: string; // default: '[data-overflow-key]'
     // which side overflow should occur (interpreted by LTR/RTL as start/end)
