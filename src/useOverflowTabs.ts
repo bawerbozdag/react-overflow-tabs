@@ -25,6 +25,13 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>(options: IOverflow
 
         setVisibleKeys(tabElements.map((element) => element.getAttribute(tabSelector) as string));
 
+        if (options.disabled == true) {
+            setOverflowKeys([]);
+            setIsOverflowing(false);
+
+            return;
+        }
+
         const allTabKeys = new Set<string>();
 
         // keeps eventKeys of tabs that are NOT fully visible
@@ -87,7 +94,7 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>(options: IOverflow
             observer.disconnect();
         };
         //
-    }, [options.container, options.tabSelector]);
+    }, [options.container, options.tabSelector, options.disabled]);
 
     return {
         visibleKeys,
