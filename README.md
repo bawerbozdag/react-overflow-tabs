@@ -13,7 +13,7 @@ Perfect for building tab systems, breadcrumbs, or step navigators.
 
 ## 🎥 Demo
 
-![Demo of react-overflow-tabs](assets/demo.gif)
+![Demo of react-overflow-tabs](https://raw.githubusercontent.com/bawerbozdag/react-overflow-tabs/master/assets/demo.gif)
 
 ---
 
