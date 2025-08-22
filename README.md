@@ -11,6 +11,12 @@ Perfect for building tab systems, breadcrumbs, or step navigators.
 
 ---
 
+## 🎥 Demo
+
+![Demo of react-overflow-tabs](assets/demo.gif)
+
+---
+
 ## ✨ Features
 
 - 🔗 **Headless** – no styles, works with your own UI
