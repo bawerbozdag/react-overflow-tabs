@@ -1,3 +1,3 @@
 export type { IOverflowState, IOverflowTabsOptions, TOverflowDirection } from "./types";
 
-export * as useOverflowTabs from "./useOverflowTabs";
+export { default as useOverflowTabs } from "./useOverflowTabs";
