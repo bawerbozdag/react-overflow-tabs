@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 // defines the overflow direction ("start" or "end")
 export type TOverflowDirection = "start" | "end";
 
@@ -7,15 +9,13 @@ export interface IOverflowTabsOptions<T extends HTMLElement = HTMLElement> {
      * - React ref (current: T | null)
      * - or direct element (via query selector)
      */
-    container: React.RefObject<T | null> | T; // container to measure overflow
-    // CSS selector for items, each must have data-overflow-key
-    tabSelector?: string; // default: '[data-overflow-key]'
-    // which side overflow should occur (interpreted by LTR/RTL as start/end)
-    overflowDirection?: TOverflowDirection; // default: "end"
-    // keys that will never be hidden (pinned)
-    pinnedKeys?: string[]; // default: []
-    // minimum number of items that must stay visible
-    minVisible?: number; // default: 0
+    container: RefObject<T | null> | T; // container to measure overflow
+    /**
+     * Attribute name for tabs.
+     * Each tab must have this attribute with a unique value.
+     * Default: "data-overflow-key" or "[data-overflow-key]"
+     */
+    tabSelector?: string;
     // temporarily disable overflow behavior
     disabled?: boolean; // default: false
 }
