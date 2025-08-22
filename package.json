@@ -1,7 +1,7 @@
 {
     "name": "react-overflow-tabs",
     "version": "0.1.0",
-    "description": "A headless React utility to gracefully collapse overflowing tabs into a dropdown menu.",
+    "description": "A lightweight React hook for responsive tab navigation with automatic overflow handling. Works with any UI framework (Tailwind, Bootstrap, MUI, custom CSS).",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
@@ -35,6 +35,9 @@
         "hook",
         "responsive",
         "navigation",
+        "responsive-tabs",
+        "tab-navigation",
+        "react-tabs-overflow",
         "intersection-observer",
         "resize-observer",
         "ui-agnostic",
@@ -45,7 +48,8 @@
         "mui",
         "menu",
         "react-hook",
-        "overflow-tabs"
+        "overflow-tabs",
+        "headless-ui"
     ],
     "author": "Baver Bozdağ",
     "license": "MIT",
