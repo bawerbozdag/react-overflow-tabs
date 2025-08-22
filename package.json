@@ -14,8 +14,7 @@
         "./package.json": "./package.json"
     },
     "files": [
-        "dist",
-        "assets"
+        "dist"
     ],
     "sideEffects": false,
     "scripts": {
