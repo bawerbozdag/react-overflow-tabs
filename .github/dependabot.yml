@@ -1,0 +1,40 @@
+version: 2
+updates:
+    - package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:00"
+          timezone: "Europe/Istanbul"
+      commit-message:
+          prefix: "chore(deps):"
+      reviewers:
+          - "bawerbozdag"
+      assignees:
+          - "bawerbozdag"
+      labels:
+          - "dependencies"
+      groups:
+          security-updates:
+              applies-to: security-updates
+              patterns:
+                  - "*"
+          minor-updates:
+              applies-to: version-updates
+              patterns:
+                  - "*"
+              update-types:
+                  - "minor"
+                  - "patch"
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:10"
+          timezone: "Europe/Istanbul"
+      commit-message:
+          prefix: "ci"
+      labels:
+          - "ci"
