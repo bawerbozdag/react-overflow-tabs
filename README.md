@@ -3,7 +3,8 @@
 A headless React hook to gracefully collapse overflowing tabs into a dropdown menu.  
 Works with any UI framework (Tailwind, Bootstrap, MUI, custom CSS).
 
-[![npm version](https://img.shields.io/npm/v/react-overflow-tabs.svg)](https://www.npmjs.com/package/react-overflow-tabs)  
+[![npm version](https://img.shields.io/npm/v/react-overflow-tabs.svg)](https://www.npmjs.com/package/react-overflow-tabs)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/react-overflow-tabs)](https://bundlephobia.com/package/react-overflow-tabs)
 [![license](https://img.shields.io/npm/l/react-overflow-tabs.svg)](LICENSE)
 
 A lightweight React hook for responsive tab navigation with automatic overflow handling.  
