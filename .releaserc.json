@@ -1,0 +1,19 @@
+{
+    "branches": ["master"],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        [
+            "@semantic-release/release-notes-generator",
+            {
+                "preset": "conventionalcommits",
+                "writerOpts": {
+                    "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}}\n{{~#if body}}\n\n{{body}}\n{{/if}}"
+                }
+            }
+        ],
+        "@semantic-release/changelog",
+        "@semantic-release/npm",
+        "@semantic-release/git",
+        "@semantic-release/github"
+    ]
+}
