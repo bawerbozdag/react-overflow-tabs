@@ -20,6 +20,7 @@
     "scripts": {
         "build": "tsup",
         "format": "prettier --write ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss}",
+        "format:check": "prettier --check ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss,md,yml,yaml}",
         "typecheck": "tsc -p tsconfig.json --noEmit"
     },
     "repository": {
