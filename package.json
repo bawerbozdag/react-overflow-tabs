@@ -1,15 +1,16 @@
 {
     "name": "react-overflow-tabs",
     "version": "1.0.0",
+    "type": "module",
     "description": "A lightweight React hook for responsive tab navigation with automatic overflow handling. Works with any UI framework (Tailwind, Bootstrap, MUI, custom CSS).",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
+    "main": "dist/index.cjs",
+    "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
-            "import": "./dist/index.mjs",
-            "require": "./dist/index.js"
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
         },
         "./package.json": "./package.json"
     },
@@ -21,6 +22,8 @@
         "build": "tsup",
         "format": "prettier --write ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss}",
         "format:check": "prettier --check ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss,md,yml,yaml}",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
         "typecheck": "tsc -p tsconfig.json --noEmit"
     },
     "repository": {
@@ -62,17 +65,20 @@
         "react": ">=18 <20"
     },
     "devDependencies": {
+        "@eslint/js": "^9.34.0",
         "@semantic-release/changelog": "^6.0.3",
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/github": "^11.0.4",
         "@semantic-release/npm": "^12.0.2",
         "@types/react": "^19.1.10",
         "conventional-changelog-conventionalcommits": "^9.1.0",
+        "eslint": "^9.34.0",
         "prettier": "^3.6.2",
         "react": "^19.1.1",
         "semantic-release": "^24.2.7",
         "tsup": "^8.5.0",
-        "typescript": "^5.9.2"
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.41.0"
     },
     "engines": {
         "node": ">=18"

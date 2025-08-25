@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import type { RefObject } from "react";
 
 // defines the overflow direction ("start" or "end")
 export type TOverflowDirection = "start" | "end";
