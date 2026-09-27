@@ -1,6 +1,6 @@
 {
     "name": "react-overflow-tabs",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "type": "module",
     "description": "A lightweight React hook for responsive tab navigation with automatic overflow handling. Works with any UI framework (Tailwind, Bootstrap, MUI, custom CSS).",
     "main": "dist/index.cjs",
