@@ -206,7 +206,7 @@ const Example = () => {
 ## 📖 Notes
 
 - Uses **`IntersectionObserver`** under the hood → supported in modern browsers.
-- `threshold: 0.999` by default → requires _full visibility_ to count as visible.
+- A tab counts as visible only when it is _fully_ inside the container (`threshold: 0.999`, tolerating sub-pixel rounding).
 - Works with **RTL** layouts, as it only tracks visibility.
 - Tabs added, removed or re-keyed after mount are picked up automatically (via `MutationObserver`).
 - `tabSelector` must be an attribute name; CSS selectors such as `.tab` are rejected with an error.

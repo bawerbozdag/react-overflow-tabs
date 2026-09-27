@@ -1,6 +1,8 @@
 import type { RefObject } from "react";
 
-// defines the overflow direction ("start" or "end")
+/**
+ * @deprecated Not used by the hook; will be removed in the next major version.
+ */
 export type TOverflowDirection = "start" | "end";
 
 export interface IOverflowTabsOptions<T extends HTMLElement = HTMLElement> {

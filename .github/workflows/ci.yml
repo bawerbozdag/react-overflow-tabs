@@ -15,7 +15,7 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version-file: .nvmrc
                   cache: npm
 
             - name: Install dependencies
@@ -34,4 +34,7 @@ jobs:
               run: npm run build
 
             - name: Check dist output
-              run: test -f dist/index.js && test -f dist/index.cjs && test -f dist/index.d.ts
+              run: test -f dist/index.js && test -f dist/index.cjs && test -f dist/index.d.ts && test -f dist/index.d.cts
+
+            - name: Lint package exports
+              run: npm run lint:package
