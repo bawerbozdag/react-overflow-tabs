@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/bawerbozdag/react-overflow-tabs/compare/v1.1.0...v1.1.1) (2026-09-27)
+
+### Bug Fixes
+
+* publish updated README and package metadata to npm
+The README rewrite and the new package description and keywords were
+
 ## [1.1.0](https://github.com/bawerbozdag/react-overflow-tabs/compare/v1.0.0...v1.1.0) (2026-09-27)
 
 ### Features
