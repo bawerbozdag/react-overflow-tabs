@@ -3,9 +3,8 @@
         /* Output & declarations */
         "outDir": "dist",
         "declaration": true,
-        "emitDeclarationOnly": false,
 
-        /* Target & libs */
+        /* Target & libs (keep in sync with tsup.config.ts) */
         "target": "ES2019",
         "lib": ["ES2019", "DOM"],
 
@@ -13,15 +12,12 @@
         "module": "ESNext",
         "moduleResolution": "bundler",
 
-        /* JSX */
-        "jsx": "react-jsx",
-
         /* Interop & type checking */
         "esModuleInterop": true,
         "skipLibCheck": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true
     },
-    "include": ["src"],
-    "exclude": ["dist", "node_modules", "**/*.test.*", "**/*.spec.*", "**/__tests__/**", "example/**"]
+    "include": ["src", "test", "vitest.config.ts", "tsup.config.ts"],
+    "exclude": ["dist", "node_modules"]
 }

@@ -2,8 +2,6 @@ name: Prettier Format Check
 
 on:
     pull_request:
-        branches: ["**"]
-        paths: ["**"]
 
 permissions:
     contents: read
@@ -17,7 +15,6 @@ jobs:
               with:
                   node-version: 20
                   cache: npm
-                  cache-dependency-path: package-lock.json
-            - run: npm install
+            - run: npm ci
             - name: Run Prettier Check
               run: npm run format:check

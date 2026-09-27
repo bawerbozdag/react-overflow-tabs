@@ -5,6 +5,11 @@ on:
         branches:
             - master
 
+permissions:
+    contents: write # push release commit & tag
+    issues: write # comment on released issues
+    pull-requests: write # comment on released PRs
+
 jobs:
     release:
         runs-on: ubuntu-22.04
@@ -12,15 +17,24 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v5
+              with:
+                  fetch-depth: 0 # semantic-release needs full history and tags
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: 20
+                  cache: npm
                   registry-url: "https://registry.npmjs.org/"
 
             - name: Install dependencies
-              run: npm install
+              run: npm ci
+
+            - name: Verify
+              run: |
+                  npm run typecheck
+                  npm run lint
+                  npm test
 
             - name: Build package
               run: npm run build

@@ -1,23 +1,33 @@
+// a plain attribute name, e.g. "data-overflow-key"
+const ATTRIBUTE_NAME_PATTERN = /^-?[A-Za-z_][\w-]*$/;
+
 /**
- * Normalize the tab selector value for consistent usage
- * Accepts a CSS selector or attribute name (with or without square brackets).
+ * Normalize the tab selector to a plain attribute name.
+ * Accepts an attribute name with or without square brackets.
  *
- * - If input is `undefined`, defaults to `[data-overflow-key]`
+ * - If input is `undefined`, defaults to `data-overflow-key`
  * - If input is in the form `[attr]`, the brackets are stripped (returns `attr`)
- * - Otherwise returns the input as-is
+ * - Throws if the result is not a plain attribute name (e.g. `.tab` or `[data-x="1"]`)
  *
- * @param selector Optional CSS selector or attribute name
- * @returns Normalized selector string (e.g., "data-overflow-key")
+ * @param selector Optional attribute name, e.g. "data-tab" or "[data-tab]"
+ * @returns Attribute name (e.g., "data-overflow-key")
  */
-const normalizeTabSelector = (selector?: string) => {
-    const normalizedSelector = selector ?? "[data-overflow-key]";
+const normalizeTabSelector = (selector = "data-overflow-key") => {
+    let attribute = selector.trim();
 
     // if it is in the form [attr], remove the square brackets.
-    if (normalizedSelector.startsWith("[") && normalizedSelector.endsWith("]")) {
-        return normalizedSelector.slice(1, -1);
+    if (attribute.startsWith("[") && attribute.endsWith("]")) {
+        attribute = attribute.slice(1, -1).trim();
     }
 
-    return normalizedSelector;
+    if (!ATTRIBUTE_NAME_PATTERN.test(attribute)) {
+        throw new Error(
+            `react-overflow-tabs: invalid tabSelector "${selector}". ` +
+                `Expected an attribute name such as "data-overflow-key" or "[data-overflow-key]".`,
+        );
+    }
+
+    return attribute;
 };
 
 export default normalizeTabSelector;

@@ -11,13 +11,16 @@ export interface IOverflowTabsOptions<T extends HTMLElement = HTMLElement> {
      */
     container: RefObject<T | null> | T; // container to measure overflow
     /**
-     * Attribute name for tabs.
-     * Each tab must have this attribute with a unique value.
-     * Default: "data-overflow-key" or "[data-overflow-key]"
+     * Attribute name that marks tabs, with or without square brackets.
+     * Each tab must have this attribute with a unique value, which is reported as its key.
+     * Default: "data-overflow-key"
      */
     tabSelector?: string;
-    // temporarily disable overflow behavior
-    disabled?: boolean; // default: false
+    /**
+     * Temporarily disable overflow tracking; all tabs are reported as visible.
+     * Default: false
+     */
+    disabled?: boolean;
 }
 
 export interface IOverflowState {

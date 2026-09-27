@@ -1,5 +1,4 @@
 import type { IOverflowTabsOptions } from "../types";
-import type { RefObject } from "react";
 
 /**
  * Resolve container element from ref or element
@@ -17,12 +16,12 @@ const resolveContainerElement = <T extends HTMLElement = HTMLElement>(
     }
 
     // if it's a React ref (has 'current'), return the current element
-    if (typeof container === "object" && "current" in container) {
-        return (container as RefObject<T>).current;
+    if ("current" in container) {
+        return container.current;
     }
 
     // otherwise, it's already an element
-    return container as T;
+    return container;
 };
 
 export default resolveContainerElement;

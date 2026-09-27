@@ -7,6 +7,6 @@ export default defineConfig({
     dts: true, // generates types file
     clean: true,
     sourcemap: false,
-    target: "es2018",
+    target: "es2019",
     external: ["react"], // peerDependency: react
 });

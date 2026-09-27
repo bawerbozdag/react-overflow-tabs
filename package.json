@@ -20,10 +20,11 @@
     "sideEffects": false,
     "scripts": {
         "build": "tsup",
-        "format": "prettier --write ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss}",
-        "format:check": "prettier --check ./**/*.{js,jsx,ts,tsx,cjs,json,css,scss,md,yml,yaml}",
-        "lint": "eslint src",
-        "lint:fix": "eslint src --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "test": "vitest run",
         "typecheck": "tsc -p tsconfig.json --noEmit"
     },
     "repository": {
@@ -70,15 +71,20 @@
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/github": "^11.0.4",
         "@semantic-release/npm": "^12.0.2",
+        "@testing-library/react": "^16.3.3",
         "@types/react": "^19.1.10",
         "conventional-changelog-conventionalcommits": "^9.1.0",
         "eslint": "^9.34.0",
+        "globals": "^17.12.0",
+        "jsdom": "^29.1.1",
         "prettier": "^3.6.2",
         "react": "^19.1.1",
+        "react-dom": "^19.1.1",
         "semantic-release": "^24.2.7",
         "tsup": "^8.5.0",
         "typescript": "^5.9.2",
-        "typescript-eslint": "^8.41.0"
+        "typescript-eslint": "^8.41.0",
+        "vitest": "^4.1.11"
     },
     "engines": {
         "node": ">=18"

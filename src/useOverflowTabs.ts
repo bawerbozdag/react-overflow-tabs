@@ -3,104 +3,136 @@ import { useEffect, useState } from "react";
 import resolveContainerElement from "./utils/resolveContainerElement";
 import normalizeTabSelector from "./utils/normalizeTabSelector";
 
-const useOverflowTabs = <T extends HTMLElement = HTMLElement>(options: IOverflowTabsOptions<T>): IOverflowState => {
-    const [visibleKeys, setVisibleKeys] = useState<string[]>([]);
-    const [overflowKeys, setOverflowKeys] = useState<string[]>([]);
+// a tab counts as visible once this much of it is inside the container
+// (slightly below 1 to tolerate sub-pixel rounding)
+const VISIBILITY_THRESHOLD = 0.999;
 
-    const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+const INITIAL_STATE: IOverflowState = {
+    visibleKeys: [],
+    overflowKeys: [],
+    isOverflowing: false,
+};
+
+const isSameKeys = (a: string[], b: string[]) => a.length === b.length && a.every((key, index) => key === b[index]);
+
+const isSameState = (a: IOverflowState, b: IOverflowState) =>
+    isSameKeys(a.visibleKeys, b.visibleKeys) && isSameKeys(a.overflowKeys, b.overflowKeys);
+
+const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
+    container,
+    tabSelector,
+    disabled = false,
+}: IOverflowTabsOptions<T>): IOverflowState => {
+    const [state, setState] = useState<IOverflowState>(INITIAL_STATE);
+    const [containerEl, setContainerEl] = useState<T | null>(null);
+
+    const attribute = normalizeTabSelector(tabSelector);
+
+    // refs can be attached after the first render (e.g. conditional rendering),
+    // so re-resolve the container after every commit; same element => no re-render
+    useEffect(() => {
+        setContainerEl(resolveContainerElement(container));
+    });
 
     useEffect(() => {
-        // resolve container element once per render
-        const containerEl = resolveContainerElement(options.container);
+        // only update state when keys actually changed
+        const commit = (next: IOverflowState) => setState((prev) => (isSameState(prev, next) ? prev : next));
 
         if (!containerEl) {
-            return;
-        }
-
-        //
-        const tabSelector = normalizeTabSelector(options.tabSelector);
-
-        // observe all tabs marked by data-event-key
-        const tabElements = Array.from(containerEl.querySelectorAll<HTMLElement>(`[${tabSelector}]`));
-
-        setVisibleKeys(tabElements.map((element) => element.getAttribute(tabSelector) as string));
-
-        if (options.disabled == true) {
-            setOverflowKeys([]);
-            setIsOverflowing(false);
+            commit(INITIAL_STATE);
 
             return;
         }
 
-        const allTabKeys = new Set<string>();
+        // tabs in DOM order
+        let tabs: HTMLElement[] = [];
 
-        // keeps eventKeys of tabs that are NOT fully visible
-        const overflowingKeys = new Set<string>();
+        // tabs that are NOT fully visible
+        const overflowingTabs = new Set<Element>();
 
-        // observer to track each tab’s visibility inside the nav
-        const observer = new IntersectionObserver(
-            (entries) => {
-                // flag to avoid unnecessary state updates
-                let changed = false;
+        const publish = () => {
+            const visibleKeys: string[] = [];
+            const overflowKeys: string[] = [];
 
-                for (const entry of entries) {
-                    const eventKey = entry.target.getAttribute(tabSelector);
+            for (const tab of tabs) {
+                const key = tab.getAttribute(attribute);
 
-                    if (!eventKey) {
-                        continue;
-                    }
-
-                    allTabKeys.add(eventKey);
-
-                    // track previous size to detect mutations
-                    const prevSize = overflowingKeys.size;
-
-                    // if not 100% visible, mark as hidden; else unmark
-                    if (entry.intersectionRatio < 1) {
-                        overflowingKeys.add(eventKey);
-                    }
-                    //
-                    else {
-                        overflowingKeys.delete(eventKey);
-                    }
-
-                    // toggle changed when set size differs
-                    if (overflowingKeys.size != prevSize) {
-                        changed = true;
-                    }
+                if (key) {
+                    (overflowingTabs.has(tab) ? overflowKeys : visibleKeys).push(key);
                 }
+            }
 
-                // update overflow list once per IO tick
-                if (changed) {
-                    const currentOverflowKeys = Array.from(overflowingKeys);
+            commit({ visibleKeys, overflowKeys, isOverflowing: overflowKeys.length > 0 });
+        };
 
-                    setOverflowKeys(currentOverflowKeys.reverse());
-                    //
-                    setVisibleKeys(Array.from(allTabKeys).filter((key) => !currentOverflowKeys.includes(key)));
+        // no IntersectionObserver (disabled, SSR, test envs) => every tab is reported as visible
+        const intersectionObserver =
+            disabled || typeof IntersectionObserver === "undefined"
+                ? null
+                : new IntersectionObserver(
+                      (entries) => {
+                          for (const entry of entries) {
+                              if (entry.intersectionRatio < VISIBILITY_THRESHOLD) {
+                                  overflowingTabs.add(entry.target);
+                              }
+                              //
+                              else {
+                                  overflowingTabs.delete(entry.target);
+                              }
+                          }
 
-                    setIsOverflowing(currentOverflowKeys.length > 0);
+                          publish();
+                      },
+                      {
+                          root: containerEl, // measure visibility relative to the container
+                          threshold: VISIBILITY_THRESHOLD,
+                      },
+                  );
+
+        // (re)collect tabs and keep the observed set in sync with the DOM
+        const syncTabs = () => {
+            const nextTabs = Array.from(containerEl.querySelectorAll<HTMLElement>(`[${attribute}]`));
+            const nextTabSet = new Set(nextTabs);
+            const prevTabSet = new Set(tabs);
+
+            for (const tab of tabs) {
+                if (!nextTabSet.has(tab)) {
+                    intersectionObserver?.unobserve(tab);
+                    overflowingTabs.delete(tab);
                 }
-            },
-            {
-                root: containerEl, // measure visibility relative to the nav container
-                threshold: 0.999, // require full visibility (100%)
-            },
-        );
+            }
 
-        tabElements.forEach((element) => observer.observe(element));
+            for (const tab of nextTabs) {
+                if (!prevTabSet.has(tab)) {
+                    intersectionObserver?.observe(tab);
+                }
+            }
+
+            tabs = nextTabs;
+
+            publish();
+        };
+
+        syncTabs();
+
+        // pick up tabs that are added, removed, reordered or re-keyed after mount
+        const mutationObserver = typeof MutationObserver === "undefined" ? null : new MutationObserver(syncTabs);
+
+        mutationObserver?.observe(containerEl, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: [attribute],
+        });
 
         // cleanup
         return () => {
-            observer.disconnect();
+            intersectionObserver?.disconnect();
+            mutationObserver?.disconnect();
         };
-        //
-    }, [options.container, options.tabSelector, options.disabled]);
+    }, [containerEl, attribute, disabled]);
 
-    return {
-        visibleKeys,
-        overflowKeys,
-        isOverflowing,
-    };
+    return state;
 };
 
 export default useOverflowTabs;

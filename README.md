@@ -129,18 +129,18 @@ const Example = () => {
 
 #### Options (`IOverflowTabsOptions`)
 
-| Option        | Type                                      | Default                 | Description                                                                 |
-| ------------- | ----------------------------------------- | ----------------------- | --------------------------------------------------------------------------- |
-| `container`   | `RefObject<HTMLElement>` \| `HTMLElement` | **required**            | The container element to observe.                                           |
-| `tabSelector` | `string`                                  | `"[data-overflow-key]"` | Selector for tab elements. Each tab must have a unique `data-overflow-key`. |
-| `disabled`    | `boolean`                                 | `false`                 | Temporarily disable overflow tracking.                                      |
+| Option        | Type                                      | Default               | Description                                                                                  |
+| ------------- | ----------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------- |
+| `container`   | `RefObject<HTMLElement>` \| `HTMLElement` | **required**          | The container element to observe.                                                            |
+| `tabSelector` | `string`                                  | `"data-overflow-key"` | Attribute that marks tabs (`"data-tab"` or `"[data-tab]"`). Its unique value is the tab key. |
+| `disabled`    | `boolean`                                 | `false`               | Temporarily disable overflow tracking; all tabs are reported as visible.                     |
 
 #### Return (`IOverflowState`)
 
 | Key             | Type       | Description                                      |
 | --------------- | ---------- | ------------------------------------------------ |
 | `visibleKeys`   | `string[]` | Keys of tabs currently visible in the container. |
-| `overflowKeys`  | `string[]` | Keys of tabs pushed into overflow (hidden).      |
+| `overflowKeys`  | `string[]` | Keys of tabs pushed into overflow, in DOM order. |
 | `isOverflowing` | `boolean`  | Whether overflow is currently happening.         |
 
 ---
@@ -149,7 +149,7 @@ const Example = () => {
 
 ```tsx
 import { useRef } from "react";
-import useOverflowTabs from "./useOverflowTabs";
+import { useOverflowTabs } from "react-overflow-tabs";
 
 const Example = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -208,6 +208,9 @@ const Example = () => {
 - Uses **`IntersectionObserver`** under the hood → supported in modern browsers.
 - `threshold: 0.999` by default → requires _full visibility_ to count as visible.
 - Works with **RTL** layouts, as it only tracks visibility.
+- Tabs added, removed or re-keyed after mount are picked up automatically (via `MutationObserver`).
+- `tabSelector` must be an attribute name; CSS selectors such as `.tab` are rejected with an error.
+- Without `IntersectionObserver` (e.g. SSR or jsdom), all tabs are reported as visible.
 
 ---
 
