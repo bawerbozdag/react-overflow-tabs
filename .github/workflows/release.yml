@@ -21,7 +21,7 @@ jobs:
                   fetch-depth: 0 # semantic-release needs full history and tags
 
             - name: Setup Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version-file: .nvmrc
                   cache: npm
