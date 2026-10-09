@@ -1,6 +1,6 @@
 {
     "name": "react-overflow-tabs",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "type": "module",
     "description": "Headless React hook for responsive tabs that collapse into a \"More\" dropdown when space runs out. Under 1 kB, works with Tailwind, Bootstrap, MUI or any CSS.",
     "main": "dist/index.cjs",
