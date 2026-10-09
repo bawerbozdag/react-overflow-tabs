@@ -1,4 +1,4 @@
-## [1.1.1](https://github.com/bawerbozdag/react-overflow-tabs/compare/v1.1.0...v1.1.1) (2026-10-09)
+## [1.1.2](https://github.com/bawerbozdag/react-overflow-tabs/compare/v1.1.1...v1.1.2) (2026-10-09)
 
 ### Performance Improvements
 
