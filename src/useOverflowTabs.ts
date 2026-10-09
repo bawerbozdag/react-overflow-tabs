@@ -7,11 +7,12 @@ import normalizeTabSelector from "./utils/normalizeTabSelector";
 // (slightly below 1 to tolerate sub-pixel rounding)
 const VISIBILITY_THRESHOLD = 0.999;
 
-const INITIAL_STATE: IOverflowState = {
-    visibleKeys: [],
-    overflowKeys: [],
+// state is shared between renders (and the initial one between hook instances), so it is frozen
+const INITIAL_STATE: IOverflowState = Object.freeze({
+    visibleKeys: Object.freeze([]) as unknown as string[],
+    overflowKeys: Object.freeze([]) as unknown as string[],
     isOverflowing: false,
-};
+});
 
 const isSameKeys = (a: string[], b: string[]) => a.length === b.length && a.every((key, index) => key === b[index]);
 
@@ -62,7 +63,13 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
                 }
             }
 
-            commit({ visibleKeys, overflowKeys, isOverflowing: overflowKeys.length > 0 });
+            commit(
+                Object.freeze({
+                    visibleKeys: Object.freeze(visibleKeys) as string[],
+                    overflowKeys: Object.freeze(overflowKeys) as string[],
+                    isOverflowing: overflowKeys.length > 0,
+                }),
+            );
         };
 
         // no IntersectionObserver (disabled, SSR, test envs) => every tab is reported as visible

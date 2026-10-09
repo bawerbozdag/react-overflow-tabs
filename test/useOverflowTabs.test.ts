@@ -223,6 +223,16 @@ describe("useOverflowTabs", () => {
         expect(result.current).toBe(before);
     });
 
+    it("returns frozen state", async () => {
+        const container = createContainer(["a"]);
+        const { result } = renderHook(() => useOverflowTabs({ container }));
+
+        expect(Object.isFrozen(result.current)).toBe(true);
+        expect(Object.isFrozen(result.current.visibleKeys)).toBe(true);
+        await waitFor(() => expect(result.current.visibleKeys).toEqual(["a"]));
+        expect(Object.isFrozen(result.current.visibleKeys)).toBe(true);
+    });
+
     it("disconnects the observer on unmount", async () => {
         const container = createContainer(["a"]);
         const { unmount } = renderHook(() => useOverflowTabs({ container }));
