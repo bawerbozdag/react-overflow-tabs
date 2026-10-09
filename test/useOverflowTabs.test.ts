@@ -223,6 +223,22 @@ describe("useOverflowTabs", () => {
         expect(result.current).toBe(before);
     });
 
+    it("ignores text changes inside tabs", async () => {
+        const container = createContainer(["a", "b"]);
+        const { result } = renderHook(() => useOverflowTabs({ container }));
+        await waitFor(() => expect(MockIntersectionObserver.instances).toHaveLength(1));
+
+        latestObserver().trigger({ b: 0 });
+        const before = result.current;
+
+        container.querySelector("button")!.textContent = "renamed";
+        await act(async () => {
+            await Promise.resolve();
+        });
+
+        expect(result.current).toBe(before);
+    });
+
     it("returns frozen state", async () => {
         const container = createContainer(["a"]);
         const { result } = renderHook(() => useOverflowTabs({ container }));

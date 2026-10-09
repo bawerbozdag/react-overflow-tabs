@@ -48,6 +48,9 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
         // tabs in DOM order
         let tabs: HTMLElement[] = [];
 
+        // same tabs as `tabs`, for O(1) lookups
+        let tabSet = new Set<Element>();
+
         // tabs that are NOT fully visible
         const overflowingTabs = new Set<Element>();
 
@@ -109,8 +112,15 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
         // (re)collect tabs and keep the observed set in sync with the DOM
         const syncTabs = () => {
             const nextTabs = Array.from(containerEl.querySelectorAll<HTMLElement>(`[${attribute}]`));
+
+            // same tabs in the same order: nothing to (un)observe, but a key may have changed
+            if (nextTabs.length === tabs.length && nextTabs.every((tab, index) => tab === tabs[index])) {
+                publish();
+
+                return;
+            }
+
             const nextTabSet = new Set(nextTabs);
-            const prevTabSet = new Set(tabs);
 
             for (const tab of tabs) {
                 if (!nextTabSet.has(tab)) {
@@ -120,12 +130,13 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
             }
 
             for (const tab of nextTabs) {
-                if (!prevTabSet.has(tab)) {
+                if (!tabSet.has(tab)) {
                     intersectionObserver?.observe(tab);
                 }
             }
 
             tabs = nextTabs;
+            tabSet = nextTabSet;
 
             publish();
         };
@@ -133,7 +144,21 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
         syncTabs();
 
         // pick up tabs that are added, removed, reordered or re-keyed after mount
-        const mutationObserver = typeof MutationObserver === "undefined" ? null : new MutationObserver(syncTabs);
+        const mutationObserver =
+            typeof MutationObserver === "undefined"
+                ? null
+                : new MutationObserver((records) => {
+                      // text/comment changes inside a tab cannot add, remove or re-key tabs
+                      const isRelevant = records.some(
+                          (record) =>
+                              record.type === "attributes" ||
+                              [...record.addedNodes, ...record.removedNodes].some((node) => node.nodeType === 1),
+                      );
+
+                      if (isRelevant) {
+                          syncTabs();
+                      }
+                  });
 
         mutationObserver?.observe(containerEl, {
             childList: true,
