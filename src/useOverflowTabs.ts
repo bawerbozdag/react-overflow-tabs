@@ -78,17 +78,27 @@ const useOverflowTabs = <T extends HTMLElement = HTMLElement>({
                 ? null
                 : new IntersectionObserver(
                       (entries) => {
+                          let changed = false;
+
                           for (const entry of entries) {
-                              if (entry.intersectionRatio < VISIBILITY_THRESHOLD) {
-                                  overflowingTabs.add(entry.target);
-                              }
-                              //
-                              else {
-                                  overflowingTabs.delete(entry.target);
+                              const isOverflowing = entry.intersectionRatio < VISIBILITY_THRESHOLD;
+
+                              if (isOverflowing !== overflowingTabs.has(entry.target)) {
+                                  changed = true;
+
+                                  if (isOverflowing) {
+                                      overflowingTabs.add(entry.target);
+                                  }
+                                  //
+                                  else {
+                                      overflowingTabs.delete(entry.target);
+                                  }
                               }
                           }
 
-                          publish();
+                          if (changed) {
+                              publish();
+                          }
                       },
                       {
                           root: containerEl, // measure visibility relative to the container
