@@ -1,3 +1,15 @@
+## [1.1.1](https://github.com/bawerbozdag/react-overflow-tabs/compare/v1.1.0...v1.1.1) (2026-10-09)
+
+### Performance Improvements
+
+* ignore irrelevant DOM mutations when syncing tabs
+Text-only changes inside a tab no longer trigger a re-query, and the
+tab set is kept between syncs instead of being rebuilt. Key changes
+on an unchanged tab list are still published.
+* skip publishing when no tab visibility changed
+Entries that repeat a tab's current state no longer rebuild the key
+arrays.
+
 ## [1.1.0](https://github.com/bawerbozdag/react-overflow-tabs/compare/v1.0.0...v1.1.0) (2026-09-27)
 
 ### Features
