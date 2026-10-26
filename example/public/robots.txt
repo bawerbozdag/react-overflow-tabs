@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# AI crawlers are welcome: this is documentation meant to be quoted
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /

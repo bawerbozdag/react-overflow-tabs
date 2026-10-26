@@ -1,0 +1,30 @@
+{
+    "name": "react-overflow-tabs-example",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "node server.js",
+        "dev:spa": "vite",
+        "build": "npm run build:client && npm run build:server",
+        "build:client": "vite build --outDir dist/client",
+        "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
+        "start": "NODE_ENV=production node server.js",
+        "typecheck": "tsc -p tsconfig.json --noEmit"
+    },
+    "dependencies": {
+        "@tailwindcss/vite": "^4.3.3",
+        "lucide-react": "^1.61.0",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "tailwindcss": "^4.3.3",
+        "tw-bootstrap-grid": "^1.4.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.20.5",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.0.0",
+        "@vitejs/plugin-react": "^5.0.0",
+        "typescript": "~6.0.3",
+        "vite": "^7.0.0"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "react-overflow-tabs",
+    "short_name": "overflow-tabs",
+    "icons": [
+        { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/favicon-512x512.png", "sizes": "512x512", "type": "image/png" }
+    ],
+    "theme_color": "#4f46e5",
+    "background_color": "#0b0e15",
+    "display": "browser"
+}
