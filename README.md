@@ -10,8 +10,6 @@
 [![TypeScript](https://img.shields.io/badge/types-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 [![license](https://img.shields.io/npm/l/react-overflow-tabs.svg)](LICENSE)
 
-![Demo of react-overflow-tabs: tabs that don't fit collapse into an overflow dropdown as the container shrinks](https://raw.githubusercontent.com/bawerbozdag/react-overflow-tabs/master/assets/demo.gif)
-
 ---
 
 ## Table of contents
@@ -236,6 +234,36 @@ const { overflowKeys } = useOverflowTabs({
 });
 ```
 
+### Vertical lists
+
+Overflow is not tied to a direction. A column with a fixed height works the same way: give the container `overflow: hidden` and let it shrink with `flex: 1; min-height: 0`.
+
+```tsx
+const containerRef = useRef<HTMLDivElement>(null);
+const { overflowKeys, isOverflowing } = useOverflowTabs({ container: containerRef });
+
+<aside style={{ display: "flex", flexDirection: "column", height: 240 }}>
+    <div
+        ref={containerRef}
+        style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, overflow: "hidden" }}
+    >
+        {ITEMS.map((item) => (
+            <button
+                key={item}
+                data-overflow-key={item}
+                style={{ visibility: overflowKeys.includes(item) ? "hidden" : "visible" }}
+            >
+                {item}
+            </button>
+        ))}
+    </div>
+
+    {isOverflowing && <button>More ({overflowKeys.length})</button>}
+</aside>;
+```
+
+Prefer `overflow: hidden` over `auto` or `scroll`. In a scrollable container, items that are scrolled out of view are reported as overflowing too, so the result changes as the user scrolls.
+
 ---
 
 ## API reference
@@ -287,6 +315,16 @@ An element with `display: none` has no size or position, so the browser can't sa
 ### Why is my "More" button getting cut off?
 
 Put the dropdown trigger **outside** the observed container, as in the examples. The container has `overflow: hidden`, so anything inside it that doesn't fit gets clipped. Giving the container `flex: 1; min-width: 0` lets it shrink to make room for the button.
+
+### Why does "More" stay visible when everything would fit without it?
+
+The "More" button sits next to the container and takes space from it. Once it appears, the container is narrower by the button's width, and tabs that fit before may no longer fit, so the button stays until there is room for all tabs _plus_ the button. When growing, "More" can therefore disappear a button's width later than it appeared when shrinking. This is how priority+ navigation works, not a bug.
+
+If you'd rather avoid the gap, keep the button's space reserved: always render it and use `visibility: hidden` while `isOverflowing` is `false`. The container then has the same width either way.
+
+### Does it work vertically, with `overflow-y`?
+
+Yes. Visibility is measured with `IntersectionObserver`, which doesn't care about the axis. Use a column container with a fixed height and `overflow: hidden`; see [Vertical lists](#vertical-lists).
 
 ### Does it handle tabs that change at runtime?
 
