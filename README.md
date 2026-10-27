@@ -10,6 +10,8 @@
 [![TypeScript](https://img.shields.io/badge/types-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 [![license](https://img.shields.io/npm/l/react-overflow-tabs.svg)](LICENSE)
 
+**[Live demo](https://react-overflow-tabs.vercel.app)**: nine working examples (pill tabs, dynamic tabs, right-to-left, vertical lists, filter chips and more), each with its code and a resizable container, in 9 languages.
+
 ---
 
 ## Table of contents
@@ -147,6 +149,8 @@ Because everything is driven by the browser's own observers, there is no polling
 ---
 
 ## Examples
+
+These and more are running in the [live demo](https://react-overflow-tabs.vercel.app). Its source is in the [`example/`](example) folder.
 
 ### Tailwind CSS
 
