@@ -5,7 +5,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const clientDir = join(root, "dist/client");
-const port = Number(process.env.PORT) || 5173;
+// the port to try first; when it is taken the next free one is used (see listen below)
+const preferredPort = Number(process.env.PORT) || 5173;
+const MAX_PORT_ATTEMPTS = 20;
 const isProduction = process.env.NODE_ENV === "production";
 
 // public origin, e.g. SITE_URL=https://my-site.vercel.app; canonical / hreflang / sitemap need absolute URLs,
@@ -181,10 +183,36 @@ const handle = async (req, res) => {
     }
 };
 
-server.listen(port, () => {
-    console.log(`SSR example (${isProduction ? "production" : "development"}): http://localhost:${port}`);
+// start on the preferred port, or the next free one: a dev server of this or another project on 5173 should not stop us
+let port = preferredPort;
+let attempt = 1;
+
+const onError = (error) => {
+    if (error.code !== "EADDRINUSE") {
+        throw error;
+    }
+
+    if (attempt >= MAX_PORT_ATTEMPTS) {
+        console.error(`No free port between ${preferredPort} and ${port}; set PORT to one that is free`);
+        process.exit(1);
+    }
+
+    console.log(`Port ${port} is in use, trying ${port + 1}`);
+    port += 1;
+    attempt += 1;
+    server.listen(port);
+};
+
+server.on("error", onError);
+// bound once, and the port is read from the server: a callback per attempt would report every port that was tried
+server.once("listening", () => {
+    server.off("error", onError);
+    console.log(
+        `SSR example (${isProduction ? "production" : "development"}): http://localhost:${server.address().port}`,
+    );
 
     if (siteUrl) {
         console.log(`SITE_URL: ${siteUrl}`);
     }
 });
+server.listen(port);
