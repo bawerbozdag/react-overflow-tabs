@@ -1,5 +1,5 @@
 /* Tailwind: only the theme (breakpoints, spacing) and the utilities, no preflight reset, so the styles below stay as written.
-   tw-bootstrap-grid adds .container, .row, .col-*, .g-* and their responsive variants (lg:col-6).
+   tw-bootstrap-grid adds .container, .row, .col-*, .g-* and their responsive variants (lg:col-7).
    Classes are only collected from the files that use them: scanning everything would also pick up words in the code
    samples (hidden, flex, visible…) as utilities. */
 @layer theme, base, components, utilities;
@@ -22,6 +22,9 @@
     --accent-strong: #4338ca;
     --accent-soft: #eef0ff;
     --on-accent: #fff;
+    --brand-from: #2563eb;
+    --brand-via: #7c3aed;
+    --brand-to: #0f766e;
     --ring: rgb(79 70 229 / 0.35);
     --track: #dfe3ef;
     --shadow-sm: 0 1px 2px rgb(20 26 42 / 0.05);
@@ -64,6 +67,9 @@
         --accent-strong: #a5b4fc;
         --accent-soft: #1c2142;
         --on-accent: #0b0e15;
+        --brand-from: #60a5fa;
+        --brand-via: #a78bfa;
+        --brand-to: #5eead4;
         --ring: rgb(129 140 248 / 0.45);
         --track: #2a3245;
         --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
@@ -197,6 +203,24 @@ main:focus {
 .logo {
     display: inline-flex;
     flex: none;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-name {
+    color: var(--brand-from); /* the fallback where background-clip: text is missing */
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .logo-name {
+        background: linear-gradient(90deg, var(--brand-from), var(--brand-via), var(--brand-to));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 }
 
 .logo img {
@@ -210,86 +234,49 @@ main:focus {
 }
 
 .lang-switch {
-    display: flex;
-    flex: 0 1 auto;
-    align-items: center;
-    gap: 4px;
-    min-width: 0;
+    position: relative;
+    flex: none;
     margin-inline-start: auto;
-    padding: 4px;
+}
+
+.lang-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px 7px 14px;
     border: 1px solid var(--border);
     border-radius: 999px;
     background: var(--surface);
     box-shadow: var(--shadow-sm);
+    color: var(--text);
     font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        border-color 0.15s,
+        color 0.15s;
 }
 
-/* the observed container of the language links; what does not fit is hidden and listed in the menu */
-.lang-list {
-    display: flex;
-    flex: 1 1 auto;
-    gap: 4px;
-    min-width: 0;
-    overflow: hidden;
+.lang-trigger:hover,
+.lang-trigger[aria-expanded="true"] {
+    border-color: var(--accent);
+    color: var(--accent-strong);
 }
 
 .lang-icon {
     flex: none;
-    margin-inline: 8px 4px;
     color: var(--muted);
-}
-
-.lang-switch a {
-    flex: none;
-    padding: 3px 10px;
-    border-radius: 999px;
-    color: var(--muted);
-    text-decoration: none;
-    white-space: nowrap;
-    transition:
-        background-color 0.15s,
-        color 0.15s;
-}
-
-.lang-switch a:hover {
-    background: var(--accent-soft);
-    color: var(--accent-strong);
-}
-
-.lang-more {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 6px 3px 10px;
-    border: 0;
-    border-radius: 999px;
-    background: none;
-    color: var(--muted);
-    font-size: 0.8125rem;
-    white-space: nowrap;
-    cursor: pointer;
-    transition:
-        background-color 0.15s,
-        color 0.15s;
-}
-
-.lang-more:hover {
-    background: var(--accent-soft);
-    color: var(--accent-strong);
 }
 
 /* the current language is inside the menu */
-.lang-more.is-active {
-    background: var(--accent);
-    color: var(--on-accent);
-    font-weight: 600;
+.hero-grid {
+    margin-bottom: 32px;
 }
 
-.lang-switch a[aria-current] {
-    background: var(--accent);
-    color: var(--on-accent);
-    font-weight: 600;
+/* the grid's gutters space the columns; the last element of a column adds nothing of its own */
+.hero-text > :last-child {
+    margin-bottom: 0;
 }
 
 .hero h1 {
@@ -332,23 +319,33 @@ main:focus {
 
 .lead {
     max-width: 60ch;
-    margin: 0 0 20px;
+    margin: 0 0 18px;
     color: var(--muted);
     font-size: 1.0625rem;
 }
 
 .install {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 32px;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 32rem;
     font-size: 0.875rem;
+}
+
+.install-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.install-links a {
+    flex: 1 1 auto;
+    justify-content: center;
 }
 
 .command {
     display: inline-flex;
-    align-items: stretch;
+    flex-direction: column;
     max-width: 100%;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -356,8 +353,56 @@ main:focus {
     box-shadow: var(--shadow-sm);
 }
 
+/* package manager picker: tabs above the command */
+.command-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    border-start-start-radius: calc(var(--radius-sm) - 1px);
+    border-start-end-radius: calc(var(--radius-sm) - 1px);
+    background: var(--surface-2);
+}
+
+.command-tab {
+    margin-bottom: -1px;
+    padding: 6px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition:
+        color 0.15s,
+        border-color 0.15s;
+}
+
+.command-tab:hover {
+    color: var(--text);
+}
+
+.command-tab[aria-selected="true"] {
+    border-bottom-color: var(--accent);
+    color: var(--accent-strong);
+}
+
+.command-tab:focus-visible {
+    outline-offset: -3px;
+}
+
+.command-body {
+    display: flex;
+    align-items: stretch;
+}
+
+.command-text {
+    display: inline-block;
+}
+
 .command code {
     display: inline-flex;
+    flex: 1 1 auto; /* the box can be wider than the command: the Copy button stays on the right edge */
     align-items: center;
     gap: 8px;
     min-width: 0;
@@ -410,7 +455,6 @@ main:focus {
     padding: 0 12px;
     border: 0;
     border-inline-start: 1px solid var(--border);
-    border-start-end-radius: calc(var(--radius-sm) - 1px);
     border-end-end-radius: calc(var(--radius-sm) - 1px);
     background: var(--surface-2);
     color: var(--muted);
@@ -751,7 +795,8 @@ main:focus {
     }
 }
 
-.more-menu button {
+.more-menu button,
+.more-menu a {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -765,29 +810,35 @@ main:focus {
     text-align: start;
     white-space: nowrap;
     cursor: pointer;
+    text-decoration: none;
 }
 
-.more-menu button svg {
+.more-menu button svg,
+.more-menu a svg {
     flex: none;
     color: var(--muted);
 }
 
-.more-menu button .check {
+.more-menu button .check,
+.more-menu a .check {
     margin-inline-start: auto;
     color: var(--accent-strong);
 }
 
-.more-menu button:hover {
+.more-menu button:hover,
+.more-menu a:hover {
     background: var(--accent-soft);
 }
 
-.more-menu button.is-active {
+.more-menu button.is-active,
+.more-menu a.is-active {
     background: var(--accent-soft);
     color: var(--accent-strong);
     font-weight: 600;
 }
 
-.more-menu button:focus-visible {
+.more-menu button:focus-visible,
+.more-menu a:focus-visible {
     outline-offset: -2px;
 }
 
@@ -990,18 +1041,6 @@ main:focus {
     }
 }
 
-/* the language list gets its own row once it no longer fits next to the logo */
-@media (max-width: 719px) {
-    .topbar {
-        gap: 14px;
-    }
-
-    .lang-switch {
-        flex: 1 1 100%;
-        margin-inline-start: 0;
-    }
-}
-
 @media (max-width: 480px) {
     .card {
         padding: 18px;
@@ -1018,11 +1057,17 @@ main:focus {
     .tab,
     .vitem,
     .more-menu button,
+    .more-menu a,
+    .lang-trigger,
     .actions button,
     .code summary,
     .install a,
-    .command,
+    .command-tab,
     .copy-button {
+        min-height: 44px;
+    }
+
+    .command-body {
         min-height: 44px;
     }
 
@@ -1032,14 +1077,6 @@ main:focus {
 
     .pills .tab {
         min-height: 40px;
-    }
-
-    .lang-switch a {
-        padding: 9px 14px;
-    }
-
-    .lang-more {
-        padding: 9px 10px 9px 14px;
     }
 
     .check {
@@ -1062,26 +1099,32 @@ main:focus {
 }
 
 @media (forced-colors: active) {
+    .hero h1,
+    .logo-name {
+        background: none;
+        -webkit-text-fill-color: currentcolor;
+    }
+
     .card,
     .frame,
     .install a,
     .command,
     .actions button,
     .chip,
-    .lang-switch {
+    .lang-trigger {
         border: 1px solid CanvasText;
     }
 
     .tab.is-active,
-    .tab:hover {
+    .tab:hover,
+    .command-tab[aria-selected="true"] {
         border-bottom-color: Highlight;
     }
 
     .pills .tab.is-active,
     .vitem.is-active,
     .chip.is-active,
-    .lang-switch a[aria-current],
-    .lang-more.is-active,
+    .more-menu a.is-active,
     .more-menu button.is-active {
         outline: 2px solid Highlight;
         outline-offset: -2px;

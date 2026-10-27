@@ -24,8 +24,8 @@ export default function Demo({ icon: Icon, title, description, code, children }:
     const titleId = useId();
 
     return (
-        // one column on phones, two from the lg breakpoint (tw-bootstrap-grid)
-        <div className="col-12 lg:col-6">
+        // every demo has the full width of the page (tw-bootstrap-grid)
+        <div className="col-12">
             <section className="card demo" aria-labelledby={titleId}>
                 <h2 id={titleId}>
                     <span className="demo-icon">

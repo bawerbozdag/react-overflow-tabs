@@ -1,6 +1,8 @@
 export type Lang = "en" | "zh" | "es" | "fr" | "pt" | "ru" | "ja" | "de" | "tr";
 
-export const LANGS: Lang[] = ["en", "zh", "es", "fr", "pt", "ru", "ja", "de", "tr"];
+// the order of the language menu and of every list derived from it (hreflang, sitemap): English and Turkish first, then
+// the other languages by how widely they are spoken
+export const LANGS: Lang[] = ["en", "tr", "zh", "es", "fr", "pt", "ru", "ja", "de"];
 
 export const LANG_NAMES: Record<Lang, string> = {
     en: "English",
@@ -41,6 +43,7 @@ export interface IMessages {
         codeExample: string;
         copy: string;
         copied: string;
+        packageManager: string;
         more: (count: number) => string;
         newTab: (count: number) => string;
     };
@@ -92,6 +95,7 @@ const en: IMessages = {
         codeExample: "Code example",
         copy: "Copy",
         copied: "Copied",
+        packageManager: "Package manager",
         more: (count) => `More (${count})`,
         newTab: (count) => `Tab ${count}`,
     },
@@ -199,6 +203,7 @@ const tr: IMessages = {
         codeExample: "Kod örneği",
         copy: "Kopyala",
         copied: "Kopyalandı",
+        packageManager: "Paket yöneticisi",
         more: (count) => `Daha fazla (${count})`,
         newTab: (count) => `Sekme ${count}`,
     },
@@ -308,6 +313,7 @@ const es: IMessages = {
         codeExample: "Ejemplo de código",
         copy: "Copiar",
         copied: "Copiado",
+        packageManager: "Gestor de paquetes",
         more: (count) => `Más (${count})`,
         newTab: (count) => `Pestaña ${count}`,
     },
@@ -418,6 +424,7 @@ const zh: IMessages = {
         codeExample: "代码示例",
         copy: "复制",
         copied: "已复制",
+        packageManager: "包管理器",
         more: (count) => `更多 (${count})`,
         newTab: (count) => `标签页 ${count}`,
     },
@@ -518,6 +525,7 @@ const ja: IMessages = {
         codeExample: "コード例",
         copy: "コピー",
         copied: "コピーしました",
+        packageManager: "パッケージマネージャー",
         more: (count) => `もっと見る (${count})`,
         newTab: (count) => `タブ ${count}`,
     },
@@ -627,6 +635,7 @@ const pt: IMessages = {
         codeExample: "Exemplo de código",
         copy: "Copiar",
         copied: "Copiado",
+        packageManager: "Gerenciador de pacotes",
         more: (count) => `Mais (${count})`,
         newTab: (count) => `Aba ${count}`,
     },
@@ -745,6 +754,7 @@ const ru: IMessages = {
         codeExample: "Пример кода",
         copy: "Копировать",
         copied: "Скопировано",
+        packageManager: "Менеджер пакетов",
         more: (count) => `Ещё (${count})`,
         newTab: (count) => `Вкладка ${count}`,
     },
@@ -855,6 +865,7 @@ const de: IMessages = {
         codeExample: "Codebeispiel",
         copy: "Kopieren",
         copied: "Kopiert",
+        packageManager: "Paketmanager",
         more: (count) => `Mehr (${count})`,
         newTab: (count) => `Tab ${count}`,
     },
@@ -966,6 +977,7 @@ const fr: IMessages = {
         codeExample: "Exemple de code",
         copy: "Copier",
         copied: "Copié",
+        packageManager: "Gestionnaire de paquets",
         more: (count) => `Plus (${count})`,
         newTab: (count) => `Onglet ${count}`,
     },
