@@ -39,6 +39,45 @@ export default function App({ initialLang = "en" }: IAppProps) {
         document.querySelector('meta[name="description"]')?.setAttribute("content", m.meta.description);
     }, [m]);
 
+    // Cards below the fold wait a little lower (data-reveal) and slide into place when they are scrolled to. The ones
+    // already on screen are never touched, so nothing flashes; without IntersectionObserver or with reduced motion
+    // nothing is hidden or moved at all. The demos are replaced when the language changes, hence the dependency.
+    useEffect(() => {
+        if (
+            !("IntersectionObserver" in window) ||
+            !window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+        ) {
+            return;
+        }
+
+        const cards = [...document.querySelectorAll<HTMLElement>("main .card")];
+        const waiting = cards.filter((card) => card.getBoundingClientRect().top > window.innerHeight);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        (entry.target as HTMLElement).removeAttribute("data-reveal");
+                        observer.unobserve(entry.target);
+                    }
+                }
+            },
+            { rootMargin: "0px 0px -8% 0px" },
+        );
+
+        for (const card of waiting) {
+            card.dataset.reveal = "pending";
+            observer.observe(card);
+        }
+
+        return () => {
+            observer.disconnect();
+
+            for (const card of waiting) {
+                card.removeAttribute("data-reveal");
+            }
+        };
+    }, [lang]);
+
     const switchTo = (next: Lang) => {
         if (next !== lang) {
             window.history.pushState(null, "", pathForLang(next));
@@ -103,7 +142,7 @@ export default function App({ initialLang = "en" }: IAppProps) {
 
                 {/* remount on language change: demo state (active tab, tab labels) is language specific.
                     The header stays mounted, so the focus remains on the language link that was used */}
-                <main id="content" tabIndex={-1} key={lang}>
+                <main id="content" tabIndex={-1} key={lang} className={announcement ? "lang-swap" : undefined}>
                     <div className="row g-5 items-start demos">
                         <Basic />
                         <Pills />

@@ -139,7 +139,7 @@ export default function TabBar({
                     className="panel"
                 >
                     {m.ui.activeTab}{" "}
-                    <b lang={tabLang} dir={dir}>
+                    <b key={active} lang={tabLang} dir={dir}>
                         {active}
                     </b>
                 </div>

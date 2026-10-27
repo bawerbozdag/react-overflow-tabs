@@ -1141,6 +1141,226 @@ main:focus {
     }
 }
 
+/* ------------------------------------------------------------------------------------------------------------------
+   motion: transform and opacity only, nothing runs without the visitor's consent to motion.
+   Every animation ends on the element's natural style: keyframes only name where it starts, and the fill mode is
+   "backwards" (the start state applies during a delay, nothing is kept afterwards). A kept "translate: 0px" is not
+   "none": it would make each card a stacking context, and an open "More" list would slide under the next card. */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes swap {
+    from {
+        opacity: 0;
+        translate: 0 4px;
+    }
+}
+
+@keyframes item-in {
+    from {
+        opacity: 0;
+        translate: 0 -4px;
+    }
+}
+
+@keyframes pop-in {
+    0% {
+        opacity: 0;
+        scale: 0.4;
+    }
+
+    60% {
+        scale: 1.2;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* switching the language replaces the demos; <main> fades in instead of jumping */
+    .lang-swap {
+        animation: fade-in 0.35s ease-out;
+    }
+
+    /* a changed command / active tab fades in */
+    .command-text,
+    .panel b {
+        animation: swap 0.22s ease-out;
+    }
+
+    /* the lists unfold item by item */
+    .more-menu li {
+        animation: item-in 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    }
+
+    .more-menu li:nth-child(2) {
+        animation-delay: 24ms;
+    }
+
+    .more-menu li:nth-child(3) {
+        animation-delay: 48ms;
+    }
+
+    .more-menu li:nth-child(4) {
+        animation-delay: 72ms;
+    }
+
+    .more-menu li:nth-child(5) {
+        animation-delay: 96ms;
+    }
+
+    .more-menu li:nth-child(6) {
+        animation-delay: 120ms;
+    }
+
+    .more-menu li:nth-child(7) {
+        animation-delay: 144ms;
+    }
+
+    .more-menu li:nth-child(8) {
+        animation-delay: 168ms;
+    }
+
+    .more-menu li:nth-child(9) {
+        animation-delay: 192ms;
+    }
+
+    /* small confirmations */
+    .copy-button.is-copied svg,
+    .chip svg {
+        animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* the code samples open and close smoothly (where the browser can animate <details>) */
+    @supports (selector(::details-content)) {
+        .code {
+            interpolate-size: allow-keywords;
+        }
+
+        .code::details-content {
+            height: 0;
+            overflow: clip;
+            transition:
+                height 0.3s ease,
+                content-visibility 0.3s allow-discrete;
+        }
+
+        .code[open]::details-content {
+            height: auto;
+        }
+    }
+
+    /* cards below the fold wait 28px lower and slide up when they are scrolled to (see useReveal in App.tsx).
+       A transition, not an animation: nothing stays attached to the card afterwards, so no card becomes a stacking
+       context and an open "More" list stays above the cards below it. Only position, never opacity: text is never
+       hidden from anyone or anything that does not scroll. */
+    .card {
+        transition: translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .card[data-reveal="pending"] {
+        translate: 0 28px;
+    }
+
+    .frame-control input::-webkit-slider-thumb {
+        transition-property: box-shadow, scale;
+    }
+
+    .frame-control input::-moz-range-thumb {
+        transition: scale 0.15s;
+    }
+
+    .frame-control input:active::-webkit-slider-thumb {
+        scale: 1.2;
+    }
+
+    .frame-control input:active::-moz-range-thumb {
+        scale: 1.2;
+    }
+
+    .lang-trigger,
+    .copy-button,
+    .command-tab {
+        transition-property: border-color, color, background-color, scale;
+    }
+
+    .lang-trigger:active,
+    .copy-button:active,
+    .command-tab:active {
+        scale: 0.97;
+    }
+
+    /* hover is for pointers: touch screens keep the tap feedback only */
+    @media (hover: hover) {
+        .badges li {
+            transition:
+                translate 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .badges li:hover {
+            border-color: var(--accent);
+            translate: 0 -2px;
+        }
+
+        .install a {
+            transition-property: border-color, color, translate, box-shadow;
+        }
+
+        .install a:hover {
+            box-shadow: var(--shadow-md);
+            translate: 0 -2px;
+        }
+
+        .card {
+            transition:
+                translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-strong);
+            box-shadow:
+                0 1px 2px rgb(20 26 42 / 0.05),
+                0 18px 40px -18px rgb(79 70 229 / 0.28);
+        }
+
+        .demo-icon {
+            transition:
+                rotate 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card:hover .demo-icon {
+            rotate: -6deg;
+            scale: 1.08;
+        }
+
+        .logo img {
+            transition:
+                rotate 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .logo:hover img {
+            rotate: -6deg;
+            scale: 1.08;
+        }
+    }
+}
+
+@media print {
+    .card[data-reveal] {
+        translate: none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

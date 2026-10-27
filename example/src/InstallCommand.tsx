@@ -98,7 +98,8 @@ export default function InstallCommand() {
             >
                 <code ref={commandRef} translate="no">
                     <Terminal size={16} />
-                    <span className="command-text" style={{ minWidth: COMMAND_WIDTH }}>
+                    {/* the key restarts the fade-in whenever another manager is picked */}
+                    <span key={current.name} className="command-text" style={{ minWidth: COMMAND_WIDTH }}>
                         {current.command}
                     </span>
                 </code>
