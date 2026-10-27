@@ -2,6 +2,7 @@ import { createServer as createHttpServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { fillTemplate } from "./page.js";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const clientDir = join(root, "dist/client");
@@ -142,16 +143,7 @@ const renderPage = async (url) => {
     const { htmlLang, head, html } = render(url, siteUrl);
     const styles = vite ? await devStyles() : "";
 
-    return {
-        htmlLang,
-        page: template
-            // the head is rendered per language; the static <title> is only the fallback for plain SPA mode
-            .replace(/<title>[\s\S]*?<\/title>/, "")
-            .replace("<!--app-head-->", () => head + styles)
-            .replace(/<html lang="[^"]*"/, `<html lang="${htmlLang}"`)
-            // swap the static crawler fallback for the server-rendered app
-            .replace(/<div id="root">[\s\S]*?<\/div>/, () => `<div id="root" data-ssr>${html}</div>`),
-    };
+    return { htmlLang, page: fillTemplate(template, { htmlLang, head, html }, styles) };
 };
 
 const handle = async (req, res) => {

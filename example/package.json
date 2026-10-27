@@ -9,7 +9,8 @@
         "build:client": "vite build --outDir dist/client",
         "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
         "start": "NODE_ENV=production node server.js",
-        "typecheck": "tsc -p tsconfig.json --noEmit"
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "build:static": "npm run build && node prerender.js"
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.3.3",
